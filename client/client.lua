@@ -101,7 +101,9 @@ function OpenMenuGarage()
 		end,
 		function(data, menu)
 			menu.close()
-			--CurrentAction = 'open_garage_action'
+		       CurrentAction     = 'garage_action_menu'
+		       CurrentActionMsg  = "Press ~INPUT_PICKUP~ to open the garage"
+		       CurrentActionData = {}
 		end
 	)	
 end
@@ -153,11 +155,16 @@ end
 
 -- Fonction qui permet de rentrer un vehicule
 function StockVehicleMenu()
-	local playerPed  = GetPlayerPed(-1)
-	if IsAnyVehicleNearPoint(this_Garage.DeletePoint.Pos.x,  this_Garage.DeletePoint.Pos.y,  this_Garage.DeletePoint.Pos.z,  30.5) then
+      local playerPed = GetPlayerPed(-1)
+      local vehicle, vehicledistance = ESX.Game.GetClosestVehicle({
+        x = this_Garage.DeletePoint.Pos.x,
+        y = this_Garage.DeletePoint.Pos.y,
+        z = this_Garage.DeletePoint.Pos.z
+        })
+        if vehicledistance ~= -1 and vehicledistance <= 15.0 and IsPedInVehicle(playerPed, vehicle, false) then
 
-		local vehicle       = GetClosestVehicle(this_Garage.DeletePoint.Pos.x, this_Garage.DeletePoint.Pos.y, this_Garage.DeletePoint.Pos.z, this_Garage.DeletePoint.Size.x, 0, 70)
 		local vehicleProps  = ESX.Game.GetVehicleProperties(vehicle)
+
 
 		ESX.TriggerServerCallback('eden_garage:stockv',function(valid)
 
